@@ -1,31 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Local Storage Exercise</title>
 
-		<link
-				rel="stylesheet"
-				href="style.css"
-		>
-		<script src="script.js"></script>
-	</head>
-	<body>
-		<form id="color-form">
-			<label for="color-input">Note Color:</label>
-			<input
-					type="text"
-					id="color-input"
-					placeholder="black, rgb(0, 0, 0), #000000"
-			>
+<head>
+    <meta charset="UTF-8">
+    <title>Local Storage Exercise</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
 
-			<button type="submit">Set as New Color</button>
-		</form>
+<body>
+    <header>
+        <div class="container">
+            <h2>Your Notes</h2>
+        </div>
+    </header>
+    <section class="right">
+        <div class="container">
+            <form id="color-form">
+                <div class="colors">
+                    <div class="swatch serious">Serious</div>
+                    <div class="swatch urgent">Urgent</div>
+                    <div class="swatch important">Important</div>
+                    <div class="swatch info">Info</div>
+                    <div class="swatch side-note">Side Note</div>
+                    <div class="swatch post">Post It!</div>
+                </div>
+                <div class="editor">
+                    <!-- This is where to compose -->
+                </div>
+            </form>
 
-		<button id="new-note-button">New Note</button>
+            <!-- <button id="new-note-button">New Note</button> -->
+        </div>
+    </section>
+    <section class="left">
+        <div class="container height">
+            <div id="note-container">
+                <!-- You'll create the notes here. -->
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <p>Console Design by Ashley Buchanan and Springboard Peoples &hearts;</p>
+        </div>
+    </footer>
 
-		<div id="note-container">
-			<!-- You'll create the notes here. -->
-		</div>
-	</body>
+</body>
+
 </html>

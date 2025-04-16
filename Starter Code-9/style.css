@@ -1,73 +1,178 @@
-*
-{
-  font-family: monospace;
-  font-size: 12px;
-  font-weight: 400;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+* {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-radius: 3px;
 }
 
-body
-{
-  line-height: 1.5;
-  color: green;
-  background-color: black;
+.container {
+    background-color: rgba(0, 50, 0, 1);
+    padding: 20px;
+    margin: 20px 40px;
+    border: 2px solid greenyellow;
+    box-shadow:
+        0 0 10px 0 rgba(172, 255, 47, 0.5),
+        inset 0 0 10px 0 rgba(172, 255, 47, 0.5);
 }
 
-button
-{
-  padding: 10px;
-  color: green;
-  border: 1px solid green;
-  background-color: black;
+.right {
+    right: 0;
+    width: 39%;
 }
 
-label
-{
-  padding: 10px;
-  border: 1px solid green;
+.left {
+    left: 0;
+    width: 61%
 }
 
-input
-{
-  width: 230px;
-  padding: 10px;
-  color: white;
-  border: 1px solid green;
-  outline: none;
-  background-color: black;
+.height {
+    height: 815px;
 }
 
-#new-note-button
-{
-  margin: 10px;
+#color-form {
+    margin: 10px;
+    height: 380px;
 }
 
-#color-form
-{
-  margin: 10px;
+.swatch {
+    text-align: center;
+    border: 2px solid;
+    padding: 10px 5px;
+    margin-bottom: 10px;
+    width: 120px;
+    box-shadow:
+        0 0 8px 0,
+        inset 0 0 8px 0;
+    transition: opacity 300ms;
+    opacity: .75;
 }
 
-#note-container
-{
-  display: flex;
-  flex-wrap: wrap;
+.swatch:hover {
+    opacity: 1;
 }
 
-.note
-{
-  font-family: monospace;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 120px;
-  height: 120px;
-  margin: 10px;
-  border: 1px solid green;
+.swatch:active {
+    box-shadow:
+        0 0 2px 0,
+        inset 0 0 8px 0;
+    translate: 0 1px;
 }
 
-.note:focus-visible
-{
-  outline: 2px solid green;
+.serious {
+    border-color: rgba(255, 0, 0, 1);
+    background-color: rgba(255, 0, 0, 0.45);
+    color: rgba(255, 0, 0, 1);
+}
+
+.urgent {
+    border-color: rgba(255, 166, 0, .9);
+    background-color: rgba(255, 166, 0, 0.55);
+    color: rgba(255, 166, 0, .9);
+}
+
+.important {
+    border-color: rgba(255, 255, 0, .8);
+    background-color: rgba(255, 255, 0, 0.5);
+    color: rgba(255, 255, 0, .8);
+}
+
+.info {
+    border-color: rgba(250, 235, 215, .8);
+    background-color: rgba(250, 235, 215, 0.5);
+    color: rgba(250, 235, 215, .8);
+}
+
+.side-note {
+    border-color: rgba(0, 255, 0, 0.4);
+    background-color: rgba(0, 100, 0, 0.5);
+    color: rgba(0, 255, 0, 0.6);
+}
+
+.post {
+    align-content: center;
+    border-color: yellowgreen;
+    background-color: rgba(0, 0, 0, 0);
+    color: yellowgreen;
+    height: 82px;
+}
+
+.editor {
+    position: absolute;
+    top: 53px;
+    right: 70px;
+    width: 370px;
+    height: 370px;
+    background-color: antiquewhite;
+}
+
+header {
+    background-color: chocolate;
+    text-align: right;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+section {
+    background-color: blue;
+    border: 2px solid grey;
+    position: absolute;
+    top: 130px;
+    height: 100%;
+}
+
+footer {
+    background-color: blueviolet;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%
+}
+
+body {
+    line-height: 1.5;
+    color: green;
+    background-color: black;
+    overflow: hidden;
+}
+
+button {
+    padding: 10px;
+    color: green;
+    border: 1px solid green;
+    background-color: black;
+}
+
+
+input {
+    background-color: transparent;
+    border: 1px solid green;
+
+    margin: 10px;
+}
+
+
+#new-note-button {
+    margin: 10px;
+}
+
+
+
+#note-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.note {
+
+    width: 132px;
+    height: 132px;
+    margin: 10px;
+    border: 1px solid green;
+}
+
+.note:focus-visible {
+    outline: 2px solid green;
 }
