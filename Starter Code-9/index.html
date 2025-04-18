@@ -3,12 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Storage Exercise</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
 </head>
 
 <body>
+    <div class="scanline-vertical"></div>
     <header>
         <div class="container">
             <h2>Your Notes</h2>
@@ -21,16 +23,16 @@
                     <div class="swatch serious">Serious</div>
                     <div class="swatch urgent">Urgent</div>
                     <div class="swatch important">Important</div>
-                    <div class="swatch info">Info</div>
-                    <div class="swatch side-note">Side Note</div>
-                    <div class="swatch post">Post It!</div>
+                    <div class="swatch info selected">Info</div>
+                    <div class="swatch side-note">Side-Note</div>
+                    <div class="post inactive">Post It!</div>
                 </div>
                 <div class="editor">
                     <!-- This is where to compose -->
+                    <textarea name="note-text" id="note-text" placeholder="Write your note here..."
+                        class="info"></textarea>
                 </div>
             </form>
-
-            <!-- <button id="new-note-button">New Note</button> -->
         </div>
     </section>
     <section class="left">
@@ -42,7 +44,7 @@
     </section>
     <footer>
         <div class="container">
-            <p>Console Design by Ashley Buchanan and Springboard Peoples &hearts;</p>
+            <p>Still learning stuff. &hearts;</p>
         </div>
     </footer>
 

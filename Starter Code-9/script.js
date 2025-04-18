@@ -1,88 +1,169 @@
-document.addEventListener("DOMContentLoaded", function ()
-{
-	const noteContainer = document.getElementById("note-container");
-	const newNoteButton = document.getElementById("new-note-button");
-	const colorForm = document.getElementById("color-form");
-	const colorInput = document.getElementById("color-input");
+document.addEventListener("DOMContentLoaded", function () {
+    const noteContainer = document.getElementById("note-container");
+    const footer = document.querySelector('footer');
+    const colorSwatches = document.querySelectorAll('.swatch');
+    const newNote = document.querySelector('#note-text');
+    const postIt = document.querySelector('.post');
 
-	// TODO: Load the note color from the local storage.
-	let noteColor = null; // Stores the selected note color from the form.
-	// TODO: Load the note ID counter from the local storage.
-	let noteIdCounter = 0; // Counter for assigning unique IDs to new notes.
+    let notesList = [];
+    let noteColor = null;
+    let noteIdCounter = 0;
+    let activeNote = null;
 
-	// TODO: Load the notes from the local storage.
+    //retrieve localStorage and assign
+    readFromLS();
 
-	function addNewNote ()
-	{
-		const id = noteIdCounter;
-		const content = `Note ${id}`;
+    newNote.addEventListener('input', () => {
+        if (newNote.value.trim() === '') {
+            postIt.classList.add('inactive');
+        } else {
+            postIt.classList.remove('inactive');
+        }
+    });
 
-		const note = document.createElement("textarea");
-		note.setAttribute("data-note-id", id.toString()); // Stores the note ID to its data attribute.
-		note.value = content; // Sets the note ID as value.
-		note.className = "note"; // Sets a CSS class.
-		note.style.backgroundColor = noteColor; // Sets the note's background color using the last selected note color.
-		noteContainer.appendChild(note); // Appends it to the note container element as its child.
+    function writeToLS(key, value) {
+        if (!key || !value) return;
+        localStorage.setItem(key, value.toString());
+    }
+    function readFromLS() {
+        noteIdCounter = parseInt(localStorage.getItem('noteIDCounter')) || 0;
+        noteColor = localStorage.getItem('noteColor') || 'info';
+        newNote.className = noteColor;
+        let notes = JSON.parse(localStorage.getItem('notesList')) || [];
 
-		noteIdCounter++; // Increments the counter since the ID is used for this note.
+        notesList = [];
+        for (let noteData of notes) {
+            const note = document.createElement('textarea');
+            note.setAttribute('data-note-id', noteData.id);
+            note.className = noteData.className;
+            note.value = noteData.value;
+            note.id = 'note';
 
-		// TODO: Add new note to the saved notes in the local storage.
-	}
+            document.querySelector('#note-container').append(note);
+            notesList.push(note);
+        }
+    }
+    function addNewNote() {
+        const id = noteIdCounter;
+        const note = document.createElement('textarea');
+        note.setAttribute("data-note-id", id.toString());
+        note.className = newNote.className;
+        note.value = newNote.value;
+        note.id = "note";
+        noteContainer.appendChild(note);
+        newNote.value = '';
 
-	colorForm.addEventListener("submit", function (event)
-	{
-		event.preventDefault(); // Prevents the default event.
+        //for persistence
+        noteIdCounter++;
+        notesList.push(note);
 
-		const newColor = colorInput.value.trim();  // Removes whitespaces.
+        //map from HTML element to JS object
+        const savedNotes = notesList.map(note => ({
+            id: note.getAttribute("data-note-id"),
+            className: note.className,
+            value: note.value
+        }));
+        writeToLS('notesList', JSON.stringify(savedNotes));
+        writeToLS('noteIdCounter', noteIdCounter);
+    }
 
-		const notes = document.querySelectorAll(".note");
-		for (const note of notes)
-		{
-			note.style.backgroundColor = newColor;
-		}
+    //select color
+    footer.addEventListener('mouseover', () => {
+        footer.style.opacity = 1;
+    });
+    footer.addEventListener('mouseout', () => {
+        footer.style.opacity = 0;
+    });
+    for (let swatch of colorSwatches) {
+        swatch.addEventListener('click', (event) => {
+            newNote.className = swatch.innerText.toLowerCase();
 
-		colorInput.value = ""; // Clears the color input field after from submission.
+            //for persistence
+            noteColor = swatch.innerText.toLowerCase();
+            writeToLS('noteColor', noteColor);
 
-		noteColor = newColor; // Updates the stored note color with the new selection.
+            for (let swatch of colorSwatches) {
+                if (event.target === swatch) {
+                    swatch.classList.add('selected');
+                } else {
+                    swatch.classList.remove('selected');
+                }
+            }
+        });
+    }
 
-		// TODO: Update the note color in the local storage.
-	});
+    //post note
+    postIt.addEventListener('click', () => {
+        if (!postIt.classList.contains('inactive')) addNewNote();
+    });
 
-	newNoteButton.addEventListener("click", function ()
-	{
-		addNewNote();
-	});
+    //delete note
+    document.addEventListener("dblclick", function (event) {
+        if (event.target.id === 'note') {
+            event.target.remove();
 
-	document.addEventListener("dblclick", function (event)
-	{
-		if (event.target.classList.contains("note"))
-		{
-			event.target.remove(); // Removes the clicked note.
+            for (let i = 0; i < notesList.length; i++) {
+                if (event.target === notesList[i]) {
+                    notesList.splice(i, 1);
 
-			// TODO: Delete the note from the saved notes in the local storage.
-		}
-	});
+                    //map from HTML element to JS object
+                    const savedNotes = notesList.map(note => ({
+                        id: note.getAttribute("data-note-id"),
+                        className: note.className,
+                        value: note.value
+                    }));
+                    writeToLS('notesList', JSON.stringify(savedNotes));
+                    writeToLS('noteIdCounter', noteIdCounter);
+                    break;
+                }
+            }
+        }
+    });
 
-	noteContainer.addEventListener("blur", function (event)
-	{
-		if (event.target.classList.contains("note"))
-		{
-			// TODO: Update the note from the saved notes in the local storage.
-		}
-	}, true);
+    //slow double click for reading and editing existing note
+    document.addEventListener('click', (event) => {
+        if (event.target.id === 'note') {
+            for (let note of notesList) {
+                note.style.width = '132px';
+                note.style.height = '132px';
+            }
+            if (event.target === activeNote) {
+                event.target.style.width = '264px';
+                event.target.style.height = '264px';
+            }
+            activeNote = event.target;
+        } else {
+            for (let note of notesList) {
+                note.style.width = '132px';
+                note.style.height = '132px';
+            }
+        }
 
-	window.addEventListener("keydown", function (event)
-	{
-		/* Ignores key presses made for color and note content inputs. */
-		if (event.target.id === "color-input" || event.target.type === "textarea")
-		{
-			return;
-		}
+        //map from HTML element to JS object
+        const savedNotes = notesList.map(note => ({
+            id: note.getAttribute("data-note-id"),
+            className: note.className,
+            value: note.value
+        }));
+        writeToLS('notesList', JSON.stringify(savedNotes));
+        writeToLS('noteIdCounter', noteIdCounter);
+    });
 
-		/* Adds a new note when the "n" key is pressed. */
-		if (event.key === "n" || event.key === "N")
-		{
-			addNewNote(); // Adds a new note.
-		}
-	});
+    noteContainer.addEventListener("blur", function (event) {
+        if (event.target.classList.contains("note")) {
+            // TODO: Update the note from the saved notes in the local storage.
+        }
+    }, true);
+
+    window.addEventListener("keydown", function (event) {
+        /* Ignores key presses made for color and note content inputs. */
+        if (event.target.id === "color-input" || event.target.type === "textarea") {
+            return;
+        }
+
+        /* Adds a new note when the "n" key is pressed. */
+        if (event.key === "n" || event.key === "N") {
+            addNewNote(); // Adds a new note.
+        }
+    });
 });
